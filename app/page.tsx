@@ -58,6 +58,8 @@ export default function Home() {
     let totalPendapatanAnak = 0;
     let totalBiayaPakan = 0;
 
+    let daftarAnakTumbuh: { jumlah: number; umur: number }[] = [];
+
     for (let i = 1; i <= lamaInvestasi; i++) {
       if (investasiBerulang && i % periodeInvestasiBerulang === 0) {
         let indukanBaru = Math.floor(nominalInvestasiBerulang / hargaBeliInduk);
@@ -68,31 +70,43 @@ export default function Home() {
         currentIndukan = Math.max(0, currentIndukan - 1);
       }
 
-      let anak = 0;
+      // Tambah umur anak-anak
+      daftarAnakTumbuh.forEach((anak) => anak.umur++);
+
+      // Proses kelahiran tiap 8 bulan
       if (i % 8 === 0) {
-        anak = currentIndukan * 1.5;
+        let anak = currentIndukan * 1.5;
         anak -= anak * (resikoAnak / 100);
-
-        let dijual = 0;
-        let dibesarkan = 0;
-
-        if (strategiPenjualan === "semua") {
-          dijual = anak;
-        } else if (strategiPenjualan === "tidak-dijual") {
-          dibesarkan = anak;
-        } else if (strategiPenjualan === "sebagian") {
-          dijual = anak * 0.25;
-          dibesarkan = anak * 0.75;
-        } else {
-          dijual = anak * 0.5;
-          dibesarkan = anak * 0.5;
-        }
-
-        const pendapatanAnak = dijual * hargaJualAnak;
-        totalPendapatanAnak += pendapatanAnak;
-        currentSaldo += pendapatanAnak;
-        currentIndukan += dibesarkan;
+        daftarAnakTumbuh.push({ jumlah: anak, umur: 0 });
       }
+
+      let dijual = 0;
+      let dibesarkan = 0;
+
+      const anakSiapJual = daftarAnakTumbuh.filter((a) => a.umur >= 3);
+      for (let j = 0; j < anakSiapJual.length; j++) {
+        const anak = anakSiapJual[j];
+        if (strategiPenjualan === "semua") {
+          dijual += anak.jumlah;
+        } else if (strategiPenjualan === "tidak-dijual") {
+          dibesarkan += anak.jumlah;
+        } else if (strategiPenjualan === "sebagian") {
+          dijual += anak.jumlah * 0.25;
+          dibesarkan += anak.jumlah * 0.75;
+        } else {
+          dijual += anak.jumlah * 0.5;
+          dibesarkan += anak.jumlah * 0.5;
+        }
+      }
+
+      // Hapus anak yang sudah dijual/dibesarkan
+      daftarAnakTumbuh = daftarAnakTumbuh.filter((a) => a.umur < 3);
+
+      // Update pendapatan dan indukan dari hasil anak yang dibesarkan
+      const pendapatanAnak = dijual * hargaJualAnak;
+      totalPendapatanAnak += pendapatanAnak;
+      currentSaldo += pendapatanAnak;
+      currentIndukan += dibesarkan;
 
       const biayaPakanBulan = currentIndukan * biayaPakan;
       totalBiayaPakan += biayaPakanBulan;
