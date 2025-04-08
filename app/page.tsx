@@ -241,13 +241,13 @@ export default function Home() {
             <h2 className="text-lg font-bold text-green-700">📘 Cara Kerja Simulasi</h2>
             <ul className="list-disc list-inside text-sm">
               <li><strong>Modal Awal:</strong> Digunakan untuk membeli indukan dan membiayai pakan setiap bulan</li>
-              <li><strong>Jumlah Indukan:</strong> = Modal Indukan ÷ Harga Beli Induk</li>
+              <li><strong>Jumlah Indukan:</strong> Modal Indukan ÷ Harga Beli Induk</li>
               <li><strong>Setiap 8 bulan:</strong> Indukan melahirkan rata-rata 1.5 anak</li>
               <li><strong>Risiko Kematian:</strong> Diterapkan ke indukan (per bulan) dan anak (saat lahir)</li>
               <li><strong>Strategi Penjualan:</strong> Menentukan berapa persen anak dijual/dibesarkan jadi induk baru</li>
-              <li><strong>Hasil Jual Anak:</strong> Dipakai untuk biaya pakan ke depannya</li>
+              <li><strong>Hasil Jual Anak:</strong> Dipakai untuk biaya pakan ke depannya. Anak akan dijual ketika usia 3 bulan</li>
               <li><strong>Investasi Berulang:</strong> Menambah indukan setiap X bulan jika opsi ini aktif</li>
-              <li><strong>Keuntungan:</strong> = Saldo akhir + Nilai aset domba - Modal awal</li>
+              <li><strong>Keuntungan:</strong> Saldo akhir + Nilai aset domba - Total modal</li>
             </ul>
           </div>
 
