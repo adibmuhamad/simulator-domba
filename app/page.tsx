@@ -255,7 +255,7 @@ export default function Home() {
           <div className="bg-white p-4 rounded shadow-md space-y-2">
             <h2 className="text-lg font-bold text-green-700">📊 Hasil Investasi</h2>
             <p><strong>Total Pendapatan dari Penjualan Anak:</strong> {formatNumber(totalPendapatanAnakState || 0)}</p>
-            <p><strong>Total Biaya Pakan:</strong> {formatNumber(totalBiayaPakanState || 0)}</p>
+            <p><strong>Total Biaya Pakan:</strong> -{formatNumber(totalBiayaPakanState || 0)}</p>
             <p><strong>Keuntungan Akhir:</strong> {formatNumber(totalKeuntungan || 0)}</p>
           </div>
           <Card>
@@ -264,7 +264,13 @@ export default function Home() {
                 <LineChart data={dataChart}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="bulan" />
-                  <YAxis />
+                  <YAxis
+                    tickFormatter={(value) => {
+                      if (value >= 1000000) return `${value / 1000000}jt`;
+                      if (value >= 1000) return `${value / 1000}rb`;
+                      return value;
+                    }}
+                  />
                   <Tooltip />
                   <Legend />
                   <Line type="monotone" dataKey="Saldo" stroke="#8884d8" />
@@ -282,7 +288,7 @@ export default function Home() {
                     <th className="border px-2 py-1">Bulan</th>
                     <th className="border px-2 py-1">Saldo</th>
                     <th className="border px-2 py-1">Nilai Aset</th>
-                    <th className="border px-2 py-1">Total Indukan</th>
+                    <th className="border px-2 py-1">Total Ekor (Indukan + Anakan)</th>
                   </tr>
                 </thead>
                 <tbody>
